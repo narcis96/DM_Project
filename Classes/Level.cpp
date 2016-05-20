@@ -8,7 +8,6 @@ using namespace std;
 USING_NS_CC;
 
 
-const cocos2d::Texture2D::TexParams texParams = { GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT };
 
 Level::Level(int levelNumber) {
 	this->levelNumber = levelNumber;
@@ -21,8 +20,23 @@ Level::Level(int levelNumber) {
 	stringstream file(data);
 	file >> scaleX;
 	file >> scaleY;
-	return;
-	file >> backgroundTexturePath;
+
+	char* backTexture = new char[100];
+
+	file >> backTexture;
+	CCLOG("%s", backTexture);
+
+	backgroundTexturePath = "";
+
+	for (int i = 0; i < strlen(backTexture); i++) {
+		backgroundTexturePath += backTexture[i];
+	}
+
+	delete backTexture;
+
+	CCLOG("%d", backgroundTexturePath.size());
+	
+	//file >> backgroundTexturePath;
 
 	int n;
 	file >> n;

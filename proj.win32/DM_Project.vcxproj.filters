@@ -75,7 +75,7 @@
       <Filter>src\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\WorldRenderer.h">
-      <Filter>src\Models</Filter>
+      <Filter>src\Controllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

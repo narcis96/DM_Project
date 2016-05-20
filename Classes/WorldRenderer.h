@@ -6,10 +6,11 @@ class WorldRenderer {
 	private:
 		Level* level;
 		void renderBackground();
-		cocos2d::Scene* scene;
+		cocos2d::Layer* scene;
 
 	public:
-		WorldRenderer(cocos2d::Scene* scene, Level* level);
+		static const cocos2d::Texture2D::TexParams texParams;
+		WorldRenderer(cocos2d::Layer* scene, Level* level);
 		~WorldRenderer();
 		void render();
 

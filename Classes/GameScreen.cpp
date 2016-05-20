@@ -32,12 +32,13 @@ Scene* GameScreen::createScene(int levelNumner) {
 // on "init" you need to initialize your instance
 bool GameScreen::init() {
 	
+	
 	if (!Layer::init()) {
 		return false;
 	}
 
 	level = new Level(1);
-	renderer = new WorldRenderer(this->getScene(), level);
+	renderer = new WorldRenderer(this, level);
 	renderer->render();
 
 	/*
@@ -71,6 +72,7 @@ bool GameScreen::init() {
 	for (int i = 0; i <= 20; i++) {
 		addBox(100 * i, 0);
 	}
+	
 
 	auto eventListener = EventListenerKeyboard::create();
 
