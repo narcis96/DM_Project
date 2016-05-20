@@ -1,0 +1,6 @@
+5 3
+road.jpg
+2 
+box.jpg 10 20 1 1 
+box.jpg 20 30 1 1 
+barrel.jpg 40 50 2 1
