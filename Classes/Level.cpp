@@ -71,6 +71,9 @@ string Level::getHeroTexturePath() {
 	return heroTexturePath;
 }
 
+std::vector<GameObject*> Level::getObjects() {
+	return objects;
+}
 
 int Level::getScaleX() {
 	return scaleX;

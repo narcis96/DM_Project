@@ -13,7 +13,7 @@ WorldRenderer::WorldRenderer(cocos2d::Layer* scene, Level* level) {
 }
 
 void WorldRenderer::renderBackground() {
-	string path = level->getBackgroundTexturePath();
+	std::string path = level->getBackgroundTexturePath();
 	auto visibleSize = Director::getInstance()->getWinSize();
 	CCLOG("%f %f", visibleSize.width, visibleSize.height);
 
@@ -34,30 +34,38 @@ void WorldRenderer::renderBackground() {
 
 	scene->addChild(background, 0);
 
+	renderHero(background);
+	renderObjects(background);
+}
 
+void WorldRenderer::renderHero(cocos2d::Sprite* background) {
 	auto hero = Sprite::create(level->getHeroTexturePath());
-	
-	
+	auto visibleSize = Director::getInstance()->getWinSize();
+
+	int scaleX = level->getScaleX();
+	int scaleY = level->getScaleY();
+
 	// position the sprite on the center of the screen
 	hero->setPosition(scaleX * visibleSize.width / 2, scaleY * visibleSize.height / 2);
 
 	CCLOG("%f %f\n", hero->getPosition().x, hero->getPosition().y);
-	
+
 	hero->setScale(0.2f);
 	background->addChild(hero);
 
 	Camera::getDefaultCamera()->setPosition(hero->getPosition());
 	CCLOG("%f %f\n", Camera::getDefaultCamera()->getPosition().x, Camera::getDefaultCamera()->getPosition().y);
+
 }
-
-void WorldRenderer::renderHero() {
-
-
+void WorldRenderer::renderObjects(cocos2d::Sprite* background) {
+	std::vector < GameObject* > objects = level->getObjects();
+	for (auto obj : objects) {
+		obj->render(background);
+	}
 }
 
 void WorldRenderer::render() {
 	renderBackground();
-	renderHero();
 	
 }
 

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __WORLD_RENDERER__
+#define __WORLD_RENDERER__
+
 #include "Level.h"
 #include "cocos2d.h"
 
@@ -6,7 +8,8 @@ class WorldRenderer {
 	private:
 		Level* level;
 		void renderBackground();
-		void renderHero();
+		void renderObjects(cocos2d::Sprite*);
+		void renderHero(cocos2d::Sprite* );
 		cocos2d::Layer* scene;
 
 	public:
@@ -16,4 +19,4 @@ class WorldRenderer {
 		void render();
 
 };
-
+#endif

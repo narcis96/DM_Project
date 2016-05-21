@@ -1,11 +1,11 @@
-#pragma once
+#ifndef __LEVEL__
+#define __LEVEL__
 #include "GameObject.h"
 #include "cocos2d.h"
 #include "Hero.h"
 #include<vector>
 #include<string>
 
-using namespace std;
 
 class Level {
 	public:
@@ -13,17 +13,18 @@ class Level {
 		~Level();
 		int getScaleX();
 		int getScaleY();
-		string getBackgroundTexturePath();
-		string getHeroTexturePath();
+		std::string getBackgroundTexturePath();
+		std::string getHeroTexturePath();
 		Hero* getHero();
+		std::vector<GameObject*> getObjects();
 
 	private:
 		int levelNumber;
 		int scaleX;
 		int scaleY;
-		vector<GameObject*> objects;
-		string backgroundTexturePath;
-		string heroTexturePath;
+		std::vector<GameObject*> objects;
+		std::string backgroundTexturePath;
+		std::string heroTexturePath;
 		Hero* hero;
 };
-
+#endif

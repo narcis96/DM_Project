@@ -5,9 +5,7 @@
 #include "cocos2d.h"
 #include "WorldRenderer.h"
 #include "Level.h"
-
 using namespace std;
-
 class GameScreen : public cocos2d::Layer {
 	public:
 		static cocos2d::Scene* createScene(int level);
@@ -26,7 +24,7 @@ class GameScreen : public cocos2d::Layer {
 
 		static int levelNumber;
 		//key press map
-		static map<cocos2d::EventKeyboard::KeyCode, chrono::high_resolution_clock::time_point> keys;
+		static std::map<cocos2d::EventKeyboard::KeyCode, chrono::high_resolution_clock::time_point> keys;
 		//cocos2d::Sprite* background;
 		//void addBox(int i, int j);
 };

@@ -4,6 +4,6 @@ Obstacle::Obstacle(std::string texture, int x, int y, int width, int height) : G
 
 }
 
-void Obstacle::render() {
+void render(cocos2d::Sprite* background) {
 
 }
