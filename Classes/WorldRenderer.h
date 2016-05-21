@@ -6,6 +6,7 @@ class WorldRenderer {
 	private:
 		Level* level;
 		void renderBackground();
+		void renderHero();
 		cocos2d::Layer* scene;
 
 	public:

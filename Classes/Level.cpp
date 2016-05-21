@@ -1,4 +1,5 @@
 #include "Level.h"
+#include "Hero.h"
 #include "Obstacle.h"
 #include<string>
 #include<fstream>
@@ -7,7 +8,9 @@
 using namespace std;
 USING_NS_CC;
 
-
+Hero* Level::getHero() {
+	return hero;
+}
 
 Level::Level(int levelNumber) {
 	this->levelNumber = levelNumber;
@@ -21,18 +24,16 @@ Level::Level(int levelNumber) {
 	file >> scaleX;
 	file >> scaleY;
 
-	char* backTexture = new char[100];
+	char* texture = new char[100];
 
-	file >> backTexture;
-	CCLOG("%s", backTexture);
+	file >> texture;
 
 	backgroundTexturePath = "";
 
-	for (int i = 0; i < strlen(backTexture); i++) {
-		backgroundTexturePath += backTexture[i];
+	for (int i = 0; i < strlen(texture); i++) {
+		backgroundTexturePath += texture[i];
 	}
 
-	delete backTexture;
 
 	CCLOG("%d", backgroundTexturePath.size());
 	
@@ -53,13 +54,31 @@ Level::Level(int levelNumber) {
 
 		objects.push_back(new Obstacle(texturePath, x, y, width, height));
 	}
+	heroTexturePath = "";
+	file >> texture;
+	for (int i = 0; i < strlen(texture); i++){
+		heroTexturePath += texture[i];
+	}
+	hero = new Hero(heroTexturePath, (int)(scaleX*Director::getInstance()->getVisibleSize().width / 2),(int)( scaleY*Director::getInstance()->getVisibleSize().height / 2), 10, 20);
 
+	delete texture;
 }
 
 string Level::getBackgroundTexturePath() {
 	return backgroundTexturePath;
 }
+string Level::getHeroTexturePath() {
+	return heroTexturePath;
+}
 
+
+int Level::getScaleX() {
+	return scaleX;
+}
+
+int Level::getScaleY() {
+	return scaleY;
+}
 
 Level::~Level() {
 

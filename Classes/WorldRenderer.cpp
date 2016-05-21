@@ -14,27 +14,51 @@ WorldRenderer::WorldRenderer(cocos2d::Layer* scene, Level* level) {
 
 void WorldRenderer::renderBackground() {
 	string path = level->getBackgroundTexturePath();
+	auto visibleSize = Director::getInstance()->getWinSize();
+	CCLOG("%f %f", visibleSize.width, visibleSize.height);
 
 	auto backgroundTexture = Director::getInstance()->getTextureCache()->getTextureForKey(path);
 	if (backgroundTexture == NULL) {
 		backgroundTexture = Director::getInstance()->getTextureCache()->addImage(path);
 	}
-	int scale = 3;
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-	auto background = Sprite::createWithTexture(backgroundTexture, CCRectMake(0, 0, scale * visibleSize.width, scale * visibleSize.height));
+	int scaleX = level->getScaleX();
+	int scaleY = level->getScaleY();
+	
+	
+	auto background = Sprite::createWithTexture(backgroundTexture, CCRectMake(0, 0, scaleX * visibleSize.width, scaleY * visibleSize.height));
 
 
 	background->getTexture()->setTexParameters(&texParams);
 	// position the sprite on the center of the screen
-	background->setPosition(scale * visibleSize.width / 2, scale * visibleSize.height / 2);
+	background->setPosition(scaleX * visibleSize.width / 2, scaleY * visibleSize.height / 2);
 
 	scene->addChild(background, 0);
+
+
+	auto hero = Sprite::create(level->getHeroTexturePath());
 	
+	
+	// position the sprite on the center of the screen
+	hero->setPosition(scaleX * visibleSize.width / 2, scaleY * visibleSize.height / 2);
+
+	CCLOG("%f %f\n", hero->getPosition().x, hero->getPosition().y);
+	
+	hero->setScale(0.2f);
+	background->addChild(hero);
+
+	Camera::getDefaultCamera()->setPosition(hero->getPosition());
+	CCLOG("%f %f\n", Camera::getDefaultCamera()->getPosition().x, Camera::getDefaultCamera()->getPosition().y);
+}
+
+void WorldRenderer::renderHero() {
+
 
 }
 
 void WorldRenderer::render() {
 	renderBackground();
+	renderHero();
+	
 }
 
 WorldRenderer::~WorldRenderer() {

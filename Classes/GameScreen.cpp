@@ -31,11 +31,14 @@ Scene* GameScreen::createScene(int levelNumner) {
 
 // on "init" you need to initialize your instance
 bool GameScreen::init() {
-	
-	
+
 	if (!Layer::init()) {
 		return false;
 	}
+	
+	
+
+
 
 	level = new Level(1);
 	renderer = new WorldRenderer(this, level);
