@@ -19,9 +19,9 @@ void GameObject::render(cocos2d::Sprite* background) {
 	auto objectSprite = Sprite::create(texture);
 	objectSprite->setPosition(x, y);
 
-	auto physicsBody = PhysicsBody::createBox(objectSprite->getContentSize(), PhysicsMaterial(0.1f, 1.0f, 0.0f));
+	auto physicsBody = PhysicsBody::createBox(objectSprite->getContentSize(), PhysicsMaterial(0.5f, 1.0f, 0.0f));
 	physicsBody->setGravityEnable(false);	
-	physicsBody->setDynamic(false);
+	//physicsBody->setDynamic(false);
 	objectSprite->setPhysicsBody(physicsBody);
 	background->addChild(objectSprite);
 }
