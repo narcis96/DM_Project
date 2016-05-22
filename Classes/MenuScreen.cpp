@@ -67,8 +67,8 @@ bool MenuScreen::init() {
 				//now we load level one
 				auto gameScreen = GameScreen::createScene(1);
 
-				// Transition Slide In, 2 seconds long
-				Director::getInstance()->replaceScene(TransitionSlideInR::create(2, gameScreen));
+				// Transition Slide In, 1 seconds long
+				Director::getInstance()->replaceScene(TransitionSlideInR::create(1.0f, gameScreen));
 				break;
 		};
 	});

@@ -9,7 +9,7 @@ class GameObject {
 		GameObject(std::string, int, int, int, int);
 		~GameObject();
 
-		virtual void render(cocos2d::Sprite* ){};
+		virtual void render(cocos2d::Sprite* background);
 		
 	protected:
 		std::string texture;

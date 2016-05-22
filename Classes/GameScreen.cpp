@@ -7,8 +7,8 @@ int GameScreen::levelNumber = 0;
 
 Scene* GameScreen::createScene(int levelNumner) {
 	// 'scene' is an autorelease object
-	auto scene = Scene::create();
-
+	auto scene = Scene::createWithPhysics();
+	
 	// 'layer' is an autorelease object
 	auto layer = GameScreen::create();
 
@@ -44,6 +44,9 @@ bool GameScreen::init() {
 	renderer = new WorldRenderer(this, level);
 	renderer->render();
 
+	
+	
+	
 	/*
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
@@ -75,7 +78,7 @@ bool GameScreen::init() {
 	for (int i = 0; i <= 20; i++) {
 		addBox(100 * i, 0);
 	}
-	
+	*/
 
 	auto eventListener = EventListenerKeyboard::create();
 
@@ -92,11 +95,11 @@ bool GameScreen::init() {
 	};
 
 
-	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, heroSprite);
-
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, renderer->getHeroSprite());
+	
 	this->scheduleUpdate();
 
-	*/
+	
 	return true;
 }
 
@@ -120,11 +123,14 @@ double GameScreen::keyPressedDuration(EventKeyboard::KeyCode code) {
 }
 
 void GameScreen::update(float delta) {
-	/*
-	
-	//heroSprite->runAction(RotateTo::create(0.5f, 1000 * delta));
+
+	auto heroSprite = renderer->getHeroSprite();
+
+	Camera::getDefaultCamera()->setPosition(heroSprite->getPosition());
+	CCLOG("cam2 = %f %f\n", Camera::getDefaultCamera()->getContentSize().width, Camera::getDefaultCamera()->getContentSize().height);
+
 	int rotateSpeed = 300;
-	int amount = 200;
+	int amount = 500;
 
 	auto position = heroSprite->getPosition();
 
@@ -148,7 +154,7 @@ void GameScreen::update(float delta) {
 
 	Camera::getDefaultCamera()->setPosition(heroSprite->getPosition());
 
-	*/
+	
 		
 		
 }
