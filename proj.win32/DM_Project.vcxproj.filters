@@ -48,6 +48,9 @@
     <ClCompile Include="..\Classes\Obstacle.cpp">
       <Filter>src\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Police.cpp">
+      <Filter>src\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -76,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\WorldRenderer.h">
       <Filter>src\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Police.h">
+      <Filter>src\Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

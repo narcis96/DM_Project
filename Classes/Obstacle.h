@@ -5,7 +5,7 @@
 
 class Obstacle : public GameObject {
 	public:
-		Obstacle(std::string, int, int, int, int);
+		Obstacle(std::string, float, float, float, float);
 		
 
 };

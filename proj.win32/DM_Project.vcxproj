@@ -153,6 +153,7 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\cocos2d-x-3.10\prebuilt\win32\*.*" "$(OutDir)"
     <ClCompile Include="..\Classes\Hero.cpp" />
     <ClCompile Include="..\Classes\Level.cpp" />
     <ClCompile Include="..\Classes\MenuScreen.cpp" />
+    <ClCompile Include="..\Classes\Police.cpp" />
     <ClCompile Include="..\Classes\WorldRenderer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -164,6 +165,7 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\cocos2d-x-3.10\prebuilt\win32\*.*" "$(OutDir)"
     <ClInclude Include="..\Classes\Hero.h" />
     <ClInclude Include="..\Classes\Level.h" />
     <ClInclude Include="..\Classes\MenuScreen.h" />
+    <ClInclude Include="..\Classes\Police.h" />
     <ClInclude Include="..\Classes\WorldRenderer.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

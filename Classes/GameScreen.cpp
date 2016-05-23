@@ -127,10 +127,9 @@ void GameScreen::update(float delta) {
 	auto heroSprite = renderer->getHeroSprite();
 
 	Camera::getDefaultCamera()->setPosition(heroSprite->getPosition());
-	CCLOG("cam2 = %f %f\n", Camera::getDefaultCamera()->getContentSize().width, Camera::getDefaultCamera()->getContentSize().height);
 
 	int rotateSpeed = 300;
-	int amount = 500;
+	int amount = 600;
 
 	auto position = heroSprite->getPosition();
 
@@ -151,6 +150,17 @@ void GameScreen::update(float delta) {
 
 
 	heroSprite->setPosition(position);
+	float policeSpeed = 200;
+	auto policeCars = level->getPoliceCars();
+	for (int i = 0; i < policeCars.size(); i++) {
+		auto policePosition = policeCars[i]->getPoliceSprite()->getPosition(); 
+		float angle = atan2(position.y - policePosition.y, position.x-policePosition.x );
+		policePosition.x += (amount - policeSpeed) * cos(angle) * delta;
+		policePosition.y += (amount - policeSpeed) * sin(angle) * delta;
+		
+		policeCars[i]->getPoliceSprite()->setPosition(policePosition);
+		policeCars[i]->getPoliceSprite()->setRotation(-angle * 180 / (atan(1) * 4));
+	}
 
 	Camera::getDefaultCamera()->setPosition(heroSprite->getPosition());
 

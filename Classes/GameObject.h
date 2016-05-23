@@ -6,14 +6,16 @@ USING_NS_CC;
 
 class GameObject {
 	public:
-		GameObject(std::string, int, int, int, int);
+		GameObject(std::string, float, float, float, float);
 		~GameObject();
 
 		virtual void render(cocos2d::Sprite* background);
+		std::string getTexture();
+		Vec2 getPosition();
 		
-	protected:
+	private:
 		std::string texture;
-		int x, y;
+		float x, y;
 		int width, height;
 };
 #endif //__GAME_OBJECT__
