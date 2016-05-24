@@ -150,6 +150,7 @@ void WorldRenderer::renderPolice(cocos2d::Sprite* background) {
 		police[i]->setPoliceSprite(policeSprite);
 		policeSprite->setPosition(police[i]->getPosition());
 		//policeSprite->setScale(0.3f);
+		policeSprite->setTag(i);
 
 		auto physicsBody = PhysicsBody::createBox(policeSprite->getContentSize(), PhysicsMaterial(0.1f, 1.0f, 0.0f));
 		physicsBody->setGravityEnable(false);

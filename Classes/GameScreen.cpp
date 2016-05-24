@@ -1,5 +1,6 @@
 #include "GameScreen.h"
 #include "MoneyBag.h"
+#include "EndLevelScreen.h"
 
 
 USING_NS_CC;
@@ -42,7 +43,6 @@ bool GameScreen::init() {
 	level = new Level(1);
 	renderer = new WorldRenderer(this, level);
 	renderer->render();
-	
 	
 	
 	
@@ -155,13 +155,42 @@ bool GameScreen::onContactBegin(PhysicsContact& contact) {
 
 	//if money bag and police car contact
 	if (contact.getShapeA()->getContactTestBitmask() == 0x02 && contact.getShapeB()->getContactTestBitmask() == 0x06) {
+	
+
+		level->erasePoliceCar(contact.getShapeA()->getBody()->getNode()->getTag());
+		
 		contact.getShapeA()->getBody()->getNode()->removeFromParent();
 		contact.getShapeB()->getBody()->getNode()->removeFromParent();
 	}
 
 	if (contact.getShapeB()->getContactTestBitmask() == 0x02 && contact.getShapeA()->getContactTestBitmask() == 0x06) {
+
+		level->erasePoliceCar(contact.getShapeB()->getBody()->getNode()->getTag());
+
 		contact.getShapeB()->getBody()->getNode()->removeFromParent();
 		contact.getShapeA()->getBody()->getNode()->removeFromParent();
+	}
+
+	//if hero and police colide
+
+	if (contact.getShapeA()->getContactTestBitmask() == 0x01 && contact.getShapeB()->getContactTestBitmask() == 0x02) {
+		level->setLife(level->getLife() - 1);
+	}
+
+	if (contact.getShapeB()->getContactTestBitmask() == 0x01 && contact.getShapeA()->getContactTestBitmask() == 0x02) {
+		level->setLife(level->getLife() - 1);
+	}
+
+
+	if (level->getLife() <= 0) {
+		auto endLevelScreen = EndLevelScreen::createScene(false);
+		Director::getInstance()->replaceScene(endLevelScreen);
+	}
+
+	if (level->getPoliceCars().size() == 0) {
+
+		auto endLevelScreen = EndLevelScreen::createScene(true);
+		Director::getInstance()->replaceScene(endLevelScreen);
 	}
 
 	
@@ -174,13 +203,13 @@ bool GameScreen::onContactBegin(PhysicsContact& contact) {
 	else contact.getShapeB()->getBody()->getNode()->runAction(FadeIn::create(0.3f));
 	contact.getShapeA()->getBody()->getNode()->setPosition(2000, 2000);
 	*/
-	CCLOG("contact olimpic");
+
 	//bodies can collide
 	return true;
 }
 
 void GameScreen::tick(float dt) {
-	CCLOG("blat");
+
 }
 
 bool GameScreen::isKeyPressed(EventKeyboard::KeyCode code) {
@@ -209,7 +238,7 @@ void GameScreen::update(float delta) {
 	Camera::getDefaultCamera()->setPosition(heroSprite->getPosition());
 
 	int rotateSpeed = 300;
-	int amount = 900;
+	int amount = 1200;
 
 	auto position = heroSprite->getPosition();
 
@@ -224,24 +253,27 @@ void GameScreen::update(float delta) {
 
 	
 	float angle = -1.0f * heroSprite->getRotation();
-	position.x += amount * cos(angle * atan(1) * 4 / 180) * delta;
-	position.y += amount * sin(angle * atan(1) * 4 / 180) * delta;
+	position.x += (amount - 50 * level->getHero()->getMoney())  * cos(angle * atan(1) * 4 / 180) * delta;
+	position.y += (amount - 50 * level->getHero()->getMoney()) * sin(angle * atan(1) * 4 / 180) * delta;
 
 	
 
 
 	heroSprite->setPosition(position);
-	float policeSpeed = random(0,200)+random(0,100);
+	
+	float policeDelta = random(0,200) + random(0,100);
 	auto policeCars = level->getPoliceCars();
+	int policeSpeed = 1000;
 	for (int i = 0; i < policeCars.size(); i++) {
 		auto policePosition = policeCars[i]->getPoliceSprite()->getPosition(); 
 		float angle = atan2(position.y - policePosition.y, position.x-policePosition.x );
-		policePosition.x += (amount - policeSpeed) * cos(angle) * delta;
-		policePosition.y += (amount - policeSpeed) * sin(angle) * delta;
+		policePosition.x += (policeSpeed - policeDelta) * cos(angle) * delta;
+		policePosition.y += (policeSpeed - policeDelta) * sin(angle) * delta;
 		
 		policeCars[i]->getPoliceSprite()->setPosition(policePosition);
 		policeCars[i]->getPoliceSprite()->setRotation(-angle * 180 / (atan(1) * 4));
 	}
+	
 
 	Camera::getDefaultCamera()->setPosition(heroSprite->getPosition());
 

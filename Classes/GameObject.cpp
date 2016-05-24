@@ -21,7 +21,7 @@ void GameObject::render(cocos2d::Sprite* background) {
 	//objectSprite->setScaleX(float(width) / size.width  );
 	//objectSprite->setScaleY(float(height) / size.height );
 
-	objectSprite->setScale(0.25f);
+	//objectSprite->setScale(0.25f);
 	
 
 	objectSprite->setPosition(x, y);

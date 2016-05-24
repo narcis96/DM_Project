@@ -28,9 +28,13 @@ class Level {
 		int getMoney();
 		int getRequiredMoney();
 		void convert(const float &x, const float &y, float &newX, float &newY);
+		void erasePoliceCar(int);
+		int getLife();
+		void setLife(int);
 
 	private:
 		int levelNumber;
+		int life;
 		int scaleX;
 		int scaleY;
 		int blocksX;

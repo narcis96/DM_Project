@@ -3,7 +3,7 @@
 #include<string>
 
 Police::Police(std::string texture, float x, float y, float width, float height) : GameObject(texture, x, y, width, height) {
-
+	
 }
 void Police::setPoliceSprite(cocos2d::Sprite* sprite) {
 	policeSprite = sprite;

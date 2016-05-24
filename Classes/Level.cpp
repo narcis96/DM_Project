@@ -103,12 +103,13 @@ Level::Level(int levelNumber) {
 
 	file >> money;
 	file >> requiredMoney;
+	file >> life;
 
 	for (int i = 0; i < money; i++) {
 		x = random(1, (int)scale * scaleX);
 		y = random(1, (int)scale * scaleY);
 		convert(x, y, newX, newY);
-
+		
 		moneyBills.push_back(new Money("dutzi.jpg", newX, newY, 0.5f, 0.5f));
 	}
 	
@@ -129,6 +130,13 @@ Level::Level(int levelNumber) {
 	delete texture;
 	
 
+}
+
+void Level::erasePoliceCar(int index) {
+	policeCars.erase(policeCars.begin() + index);
+
+	for (int i = 0; i < policeCars.size(); i++)
+		policeCars[i]->getPoliceSprite()->setTag(i);
 }
 
 string Level::getBackgroundTexturePath() {
@@ -177,6 +185,14 @@ float Level::getBlockWidth() {
 
 float Level::getBlockHeight() {
 	return blockHeight;
+}
+
+int Level::getLife() {
+	return life;
+}
+
+void Level::setLife(int life) {
+	this->life = life;
 }
 
 int Level::getMoney() {
