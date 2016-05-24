@@ -1,20 +1,23 @@
 #include "Level.h"
 #include "Hero.h"
 #include "Obstacle.h"
+#include "cocos2d.h"
+#include "SimpleAudioEngine.h"
 #include<string>
 #include<fstream>
 #include<sstream>
 
 using namespace std;
 USING_NS_CC;
+
+
 const float Level::scale = 100;
 Hero* Level::getHero() {
 	return hero;
 }
 
 
-void Level::convert(const float &x, const float &y,float &newX,float &newY)
-{
+void Level::convert(const float &x, const float &y,float &newX,float &newY) {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	float totalWidth = scaleX * visibleSize.width;
 	float totalHeight = scaleY * visibleSize.height;
@@ -24,11 +27,10 @@ void Level::convert(const float &x, const float &y,float &newX,float &newY)
 	newX += visibleSize.width;
 	newY += visibleSize.height;
 }
-void Level::addObstacle(std::string texture,const float &x, const float &y)
-{
+void Level::addObstacle(std::string texture,const float &x, const float &y) {
 	float newX, newY;
 	convert(x, y, newX, newY);
-	objects.push_back(new Obstacle(texture, newX, newY, 1, 1));
+	objects.push_back(new Obstacle(texture, newX, newY, 1 * blockWidth, 1 * blockHeight));
 
 }
 Level::Level(int levelNumber) {
@@ -83,7 +85,7 @@ Level::Level(int levelNumber) {
 		file >> width;	
 		file >> height;
 		convert(x, y, newX, newY);
-		objects.push_back(new Obstacle(texturePath, newX, newY, width, height));
+		objects.push_back(new Obstacle(texturePath, newX, newY, width * blockWidth, height * blockHeight));
 	}
 
 	//read police cars
@@ -95,17 +97,22 @@ Level::Level(int levelNumber) {
 		file >> x;
 		file >> y;
 		convert(x, y, newX, newY);
-		policeCars.push_back(new Police(texturePath, newX, newY, 10, 20));
+		policeCars.push_back(new Police(texturePath, newX, newY, 2, 1));
 	}
 
 
+	file >> money;
+	file >> requiredMoney;
 
-	/*int padding = 20;
-	addObstacle("crate.png", 1, 1);
-	addObstacle("crate.png", scale * scaleX - padding, scale * scaleY - padding);
-	addObstacle("crate.png", 1, scale * scaleY - padding);
-	addObstacle("crate.png", scale * scaleX - padding, padding);
-	*/
+	for (int i = 0; i < money; i++) {
+		x = random(1, (int)scale * scaleX);
+		y = random(1, (int)scale * scaleY);
+		convert(x, y, newX, newY);
+
+		moneyBills.push_back(new Money("dutzi.jpg", newX, newY, 0.5f, 0.5f));
+	}
+	
+
 	heroTexturePath = "";
 	file >> texture;
 	for (int i = 0; i < strlen(texture); i++){
@@ -113,11 +120,13 @@ Level::Level(int levelNumber) {
 	}
 	hero = new Hero(heroTexturePath, (int)(scaleX*Director::getInstance()->getVisibleSize().width / 2),(int)( scaleY*Director::getInstance()->getVisibleSize().height / 2), 10, 20);
 
+	//not an actual texture
+	file >> texture;
+
+	//play background music on loop
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(texture, true);
+
 	delete texture;
-
-	string soundPath;
-	file >> soundPath;
-
 	
 
 }
@@ -137,6 +146,10 @@ std::vector<Police*> Level::getPoliceCars() {
 	return policeCars;
 }
 
+std::vector<Money*> Level::getMoneyBills() {
+	return moneyBills;
+}
+
 int Level::getScaleX() {
 	return scaleX;
 }
@@ -153,6 +166,10 @@ int Level::getBlocksY() {
 	return blocksY;
 }
 
+int Level::getRequiredMoney() {
+	return requiredMoney;
+}
+
 
 float Level::getBlockWidth() {
 	return blockWidth;
@@ -160,6 +177,10 @@ float Level::getBlockWidth() {
 
 float Level::getBlockHeight() {
 	return blockHeight;
+}
+
+int Level::getMoney() {
+	return money;
 }
 
 Level::~Level() {

@@ -6,6 +6,7 @@
 class Obstacle : public GameObject {
 	public:
 		Obstacle(std::string, float, float, float, float);
+		void render(cocos2d::Sprite*);
 		
 
 };

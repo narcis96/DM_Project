@@ -13,7 +13,7 @@ class GameObject {
 		std::string getTexture();
 		Vec2 getPosition();
 		
-	private:
+	protected:
 		std::string texture;
 		float x, y;
 		int width, height;

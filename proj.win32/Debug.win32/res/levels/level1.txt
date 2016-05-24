@@ -9,4 +9,6 @@ crate.png 150 250 1 1
 police_car.png 20 20
 police_car.png 250 100
 police_car.png 100 250
+20 5
 bmw.png
+garda__.mp3

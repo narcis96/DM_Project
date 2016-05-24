@@ -12,6 +12,4 @@ void Police::setPoliceSprite(cocos2d::Sprite* sprite) {
 
 cocos2d::Sprite* Police::getPoliceSprite() {
 	return policeSprite;
-
 }
-

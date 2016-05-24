@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Hero.h"
 #include "Police.h"
+#include "Money.h"
 #include<vector>
 #include<string>
 
@@ -23,6 +24,10 @@ class Level {
 		Hero* getHero();
 		std::vector<GameObject*> getObjects();
 		std::vector<Police*> getPoliceCars();
+		std::vector<Money*> getMoneyBills();
+		int getMoney();
+		int getRequiredMoney();
+		void convert(const float &x, const float &y, float &newX, float &newY);
 
 	private:
 		int levelNumber;
@@ -32,13 +37,15 @@ class Level {
 		int blocksY;
 		float blockWidth;
 		float blockHeight;
+		int money;
+		int requiredMoney;
 		std::vector<GameObject*> objects;
 		std::string backgroundTexturePath;
 		std::string heroTexturePath;
 		Hero* hero;
 		std::vector<Police*> policeCars;
 		static const float scale;
-		void convert(const float &x, const float &y, float &newX, float &newY);
 		void addObstacle(std::string texture, const float &x, const float &y);
+		std::vector<Money*> moneyBills;
 };
 #endif

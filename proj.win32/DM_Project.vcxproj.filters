@@ -51,6 +51,12 @@
     <ClCompile Include="..\Classes\Police.cpp">
       <Filter>src\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Money.cpp">
+      <Filter>src\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MoneyBag.cpp">
+      <Filter>src\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -81,6 +87,12 @@
       <Filter>src\Controllers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Police.h">
+      <Filter>src\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Money.h">
+      <Filter>src\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MoneyBag.h">
       <Filter>src\Models</Filter>
     </ClInclude>
   </ItemGroup>

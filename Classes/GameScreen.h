@@ -17,6 +17,8 @@ class GameScreen : public cocos2d::Layer {
 		void update(float) override;
 		bool isKeyPressed(cocos2d::EventKeyboard::KeyCode);
 		double keyPressedDuration(cocos2d::EventKeyboard::KeyCode);
+		bool onContactBegin(PhysicsContact&);
+		void tick(float);
 	
 	private:
 		WorldRenderer* renderer;

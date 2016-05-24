@@ -11,14 +11,16 @@ class WorldRenderer {
 		void renderObjects(cocos2d::Sprite*);
 		void renderHero(cocos2d::Sprite* );
 		void renderPolice(cocos2d::Sprite*);
+		void renderMoney(cocos2d::Sprite*);
 		cocos2d::Layer* scene;
 		Sprite* heroSprite;
 		Sprite* background;
-		void debug();
+		void renderWall();
 
 	public:
 		static const cocos2d::Texture2D::TexParams texParams;
 		WorldRenderer(cocos2d::Layer* scene, Level* level);
+		Sprite* getBackground();
 		~WorldRenderer();
 		void render();
 		Sprite* getHeroSprite();

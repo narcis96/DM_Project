@@ -1,4 +1,5 @@
 #include "GameScreen.h"
+#include "MoneyBag.h"
 
 
 USING_NS_CC;
@@ -35,15 +36,13 @@ bool GameScreen::init() {
 	if (!Layer::init()) {
 		return false;
 	}
-	
-	
 
 
 
 	level = new Level(1);
 	renderer = new WorldRenderer(this, level);
 	renderer->render();
-
+	
 	
 	
 	
@@ -88,6 +87,16 @@ bool GameScreen::init() {
 		if (keys.find(keyCode) == keys.end()){
 			keys[keyCode] = std::chrono::high_resolution_clock::now();
 		}
+
+
+		if (keyCode == EventKeyboard::KeyCode::KEY_CTRL) {
+			if (level->getHero()->getMoney() >= level->getRequiredMoney()) {
+				auto moneyBag = new MoneyBag("money_bag.png", renderer->getHeroSprite()->getPosition().x, renderer->getHeroSprite()->getPosition().y, 1, 1);
+				moneyBag->render(renderer->getBackground());
+				level->getHero()->setMoney(level->getHero()->getMoney() - level->getRequiredMoney());
+			}
+			
+		}
 	};
 
 	eventListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event){
@@ -96,11 +105,82 @@ bool GameScreen::init() {
 
 
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, renderer->getHeroSprite());
+
+	//adds contact event listener
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(GameScreen::onContactBegin, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener,
+		this);
+
+	schedule(CC_SCHEDULE_SELECTOR(GameScreen::tick), 0.3f);
 	
 	this->scheduleUpdate();
 
 	
 	return true;
+}
+
+bool GameScreen::onContactBegin(PhysicsContact& contact) {
+
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+
+	//prevent police and money to collide
+	if (contact.getShapeA()->getContactTestBitmask() == 0x02 && contact.getShapeB()->getContactTestBitmask()== 0x05) {
+		return false;
+	}
+
+	if (contact.getShapeB()->getContactTestBitmask() == 0x02 && contact.getShapeA()->getContactTestBitmask() == 0x05) {
+		return false;
+	}
+
+	//hero and money contact
+	if (contact.getShapeA()->getContactTestBitmask() == 0x01 && contact.getShapeB()->getContactTestBitmask() == 0x05) {
+		float newX, newY;
+		int x = random(1, (int)100 * level->getScaleX());
+		int y = random(1, (int)100 * level->getScaleY());
+		level->convert(x, y, newX, newY);
+		contact.getShapeB()->getBody()->getNode()->setPosition(Vec2(newX, newY));
+		level->getHero()->setMoney(level->getHero()->getMoney() + 1);
+	}
+
+	if (contact.getShapeB()->getContactTestBitmask() == 0x01 && contact.getShapeA()->getContactTestBitmask() == 0x05) {
+		float newX, newY;
+		int x = random(1, (int)100 * level->getScaleX());
+		int y = random(1, (int)100 * level->getScaleY());
+		level->convert(x, y, newX, newY);
+		contact.getShapeA()->getBody()->getNode()->setPosition(Vec2(newX, newY));
+		level->getHero()->setMoney(level->getHero()->getMoney() + 1);
+	}
+
+	//if money bag and police car contact
+	if (contact.getShapeA()->getContactTestBitmask() == 0x02 && contact.getShapeB()->getContactTestBitmask() == 0x06) {
+		contact.getShapeA()->getBody()->getNode()->removeFromParent();
+		contact.getShapeB()->getBody()->getNode()->removeFromParent();
+	}
+
+	if (contact.getShapeB()->getContactTestBitmask() == 0x02 && contact.getShapeA()->getContactTestBitmask() == 0x06) {
+		contact.getShapeB()->getBody()->getNode()->removeFromParent();
+		contact.getShapeA()->getBody()->getNode()->removeFromParent();
+	}
+
+	
+
+	/*if (contact.getShapeA()->getCollisionBitmask() == 0x01) {
+		contact.getShapeA()->getBody()->getNode()->getParent()->runAction(FadeIn::create(0.5f));
+		contact.getShapeA()->getBody()->getNode()->setPosition(contact.getShapeA()->getBody()->getNode()->getPosition().x + 50, contact.getShapeB()->getBody()->getNode()->getPosition().y + 50);
+		nodeA->setRotation(90);
+	}
+	else contact.getShapeB()->getBody()->getNode()->runAction(FadeIn::create(0.3f));
+	contact.getShapeA()->getBody()->getNode()->setPosition(2000, 2000);
+	*/
+	CCLOG("contact olimpic");
+	//bodies can collide
+	return true;
+}
+
+void GameScreen::tick(float dt) {
+	CCLOG("blat");
 }
 
 bool GameScreen::isKeyPressed(EventKeyboard::KeyCode code) {
@@ -129,7 +209,7 @@ void GameScreen::update(float delta) {
 	Camera::getDefaultCamera()->setPosition(heroSprite->getPosition());
 
 	int rotateSpeed = 300;
-	int amount = 600;
+	int amount = 900;
 
 	auto position = heroSprite->getPosition();
 
@@ -141,6 +221,7 @@ void GameScreen::update(float delta) {
 	if (isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
 		heroSprite->setRotation((int)(heroSprite->getRotation() + rotateSpeed * delta) % 360);
 	}
+
 	
 	float angle = -1.0f * heroSprite->getRotation();
 	position.x += amount * cos(angle * atan(1) * 4 / 180) * delta;
@@ -150,7 +231,7 @@ void GameScreen::update(float delta) {
 
 
 	heroSprite->setPosition(position);
-	float policeSpeed = 200;
+	float policeSpeed = random(0,200)+random(0,100);
 	auto policeCars = level->getPoliceCars();
 	for (int i = 0; i < policeCars.size(); i++) {
 		auto policePosition = policeCars[i]->getPoliceSprite()->getPosition(); 

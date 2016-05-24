@@ -2,6 +2,7 @@
 #include "Level.h"
 #include "cocos2d.h"
 #include "Obstacle.h"
+#include "Money.h"
 USING_NS_CC;
 
 
@@ -12,7 +13,7 @@ WorldRenderer::WorldRenderer(cocos2d::Layer* scene, Level* level) {
 	this->scene = scene;
 }
 
-void WorldRenderer::debug() {
+void WorldRenderer::renderWall() {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	float totalWidth = level->getScaleX() * visibleSize.width;
@@ -113,6 +114,8 @@ void WorldRenderer::renderBackground() {
 
 void WorldRenderer::renderHero(cocos2d::Sprite* background) {
     heroSprite = Sprite::create(level->getHeroTexturePath());
+	//heroSprite->setContentSize(Size(2 * level->getBlockWidth(), level->getBlockHeight()));
+	
 	auto visibleSize = Director::getInstance()->getWinSize();
 
 	int scaleX = level->getScaleX();
@@ -123,12 +126,15 @@ void WorldRenderer::renderHero(cocos2d::Sprite* background) {
 	heroSprite->setPosition(scaleX * visibleSize.width / 2 + visibleSize.width, scaleY * visibleSize.height / 2 + visibleSize.height);
 	//CCLOG("%f %f ", heroSprite->getPosition().x, heroSprite->getPosition().y);
 
-	heroSprite->setScale(0.35f);
+	heroSprite->setScale(0.5f);
 
 	auto physicsBody = PhysicsBody::createBox(heroSprite->getContentSize(), PhysicsMaterial(0.1f, 1.0f, 0.0f));
 	physicsBody->setGravityEnable(false);
+	physicsBody->setContactTestBitmask(0x01);
 	heroSprite->setPhysicsBody(physicsBody);
 	background->addChild(heroSprite);
+
+
 
 }
 
@@ -147,9 +153,10 @@ void WorldRenderer::renderPolice(cocos2d::Sprite* background) {
 
 		auto physicsBody = PhysicsBody::createBox(policeSprite->getContentSize(), PhysicsMaterial(0.1f, 1.0f, 0.0f));
 		physicsBody->setGravityEnable(false);
+		physicsBody->setContactTestBitmask(0x02);
 		policeSprite->setPhysicsBody(physicsBody);
 		
-		background->addChild(policeSprite);
+		background->addChild(policeSprite, 1);
 
 	}
 	
@@ -161,22 +168,21 @@ void WorldRenderer::renderObjects(cocos2d::Sprite* background) {
 	for (auto obj : objects) {
 		obj->render(background);
 	}
-	auto visibleSize = Director::getInstance()->getWinSize();
-	int scaleX = level->getScaleX();
-	int scaleY = level->getScaleY();
-	int n = visibleSize.width*scaleX / 100;
-	int m = visibleSize.height*scaleY / 100;
 
-	
-	/*for (int i = 0; i < n; ++i)
-	{
-		GameObject* temp = new Obstacle("box.png", 100*i, 0, 100, 100);
-		temp->render(background);
-	}*/
+}
+
+void WorldRenderer::renderMoney(cocos2d::Sprite* background) {
+	for (int i = 0; i < level->getMoneyBills().size(); i++) {
+		level->getMoneyBills()[i]->render(background);
+	}
 }
 
 Sprite* WorldRenderer::getHeroSprite() {
 	return heroSprite;
+}
+
+Sprite* WorldRenderer::getBackground() {
+	return background;
 }
 
 void WorldRenderer::render() {
@@ -185,8 +191,9 @@ void WorldRenderer::render() {
 	renderHero(background);
 	renderObjects(background);
 	renderPolice(background);
-	debug();
-	
+	renderWall();
+	renderMoney(background);
+
 }
 
 WorldRenderer::~WorldRenderer() {
